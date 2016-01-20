@@ -1,0 +1,18 @@
+{
+    "contents" : "\nmatched_items <- read.csv(file = \"olx_mapped_titles.csv\", \n                          header = TRUE, sep = \",\")\n\n# Getting unique ads within matched items\nmatched_items <- unique(matched_items)\n\n# Getting Most Viewed and Top Ten Ads\nmost_viewed <- sort(matched_items$Views, decreasing = TRUE, \n                    na.last = TRUE)\nmost_viewed <- unique(most_viewed)\nprint(most_viewed[1:10])\n\n# Getting mobile that was avialable for sale most\nhash <- function( keys ) {\n  result <- new.env( hash = TRUE, parent = emptyenv(), size = length( keys ) )\n  for( key in keys ) {\n    result[[ key ]] <- 0\n  }\n  return( result )\n}\nread_new_mobile_data <- read.csv(file = \"new_mobile_prices.csv\",\n                                 header = TRUE, sep = \",\")\nnew_mob_hash <- hash(read_new_mobile_data$Title)\npopulate_occurences(read_new_mobile_data$Title, new_mob_hash)\n\npopulate_occurences <- function (some_data, hash) {\n  for (key in some_data) {\n    hash[[key]] <- hash[[key]] + 1\n  }  \n  return (hash)\n}\n\nget_top_most <- function (some_data, hash) {\n  max = 0\n  most_available = \"\"\n  for (key in some_data) {\n    if (max < hash[[key]]) {\n      max = hash[[key]]\n      most_available = key\n    }\n  }\n  print(most_available)\n}\n\n# Getting Top Ten Mobiles\n\nget_top_ten <- function (some_data, hash) {\n  max = 0\n  for (key in some_data) {\n    if (max < hash[[key]]) {\n      max = hash[[key]]\n      most_available = key\n      cat(key, max, \"\")\n    }\n  }  \n}\n\n# Getting user who has post most ads and Top Users\nunique_users <- unique(matched_items$Username)\nunique_users_hash <- hash(unique_users)\npopulate_occurences(matched_items$Username, unique_users_hash)\nprint (get_top_most(matched_items$Username, unique_users_hash))\nget_top_ten(matched_items$Username, unique_users_hash)\n\n# Getting the City that included most ads and Ranking them\nunique_cities <- unique(matched_items$City)\nunique_cities_hash <- hash(unique_cities)\npopulate_occurences(matched_items$City, unique_cities_hash)\n\nprint(typeof(matched_items$New_Price[1]))\n# Getting change in Prices [New-Original]\nfor (i in 1 : length(matched_items$Title)) {\n    if (!is.na(matched_items$New_Price[i])) {\n      change_in_price <- matched_items$New_Price[i] - matched_items$Old_Price[i]\n      print(change_in_price)\n    }\n    else change_in_price <- NA\n} \nprint(change_in_price)\n\nprint(as.numeric_version(matched_items$New_Price[25]))\n\n\n",
+    "created" : 1452175315740.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2040574672",
+    "id" : "3A6DAD48",
+    "lastKnownWriteTime" : 1452261961,
+    "path" : "C:/Users/Umair/Desktop/Assignment_3/analysis.R",
+    "project_path" : "analysis.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
